@@ -17,9 +17,11 @@ UDEV_GE_141 ?= "0"
 
 KBRANCH = "project-magpie"
 
-SRC_URI = "git://github.com/project-magpie/linux-sh4-2.6.32.y.git;protocol=https;branch=${KBRANCH} \
-           file://${MACHINE}_defconfig \
-           file://st-coprocessor.h \
+SRC_URI = " \
+		git://github.com/project-magpie/linux-sh4-2.6.32.y.git;protocol=https;branch=${KBRANCH} \
+		file://${MACHINE}_defconfig \
+		file://st-coprocessor.h \
+		file://console.map.c-workaround-for-gcc-4.8.2-build.patch \
 "
 S = "${WORKDIR}/git"
 PARALLEL_MAKEINST = ""

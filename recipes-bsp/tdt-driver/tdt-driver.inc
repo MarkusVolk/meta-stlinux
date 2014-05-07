@@ -17,7 +17,7 @@ BINARY_PTI_NP_PATH ?= "/data/pti_np"
 
 # using our own tdt drivers because this has less overhead
 SRC_URI = " \
-        git://gitorious.org/~martii/open-duckbox-project-sh4/martiis-tdt.git \
+        git://gitorious.org/neutrino-mp/tdt-driver.git \
         file://0001-player2_191-silence-kmsg-spam.patch;apply=no \
         file://0002-e2proc-silence-kmsg-spam.patch \
         file://0003-pti-silence-kmsg-spam.patch \
@@ -31,7 +31,6 @@ SRC_URI = " \
         file://0005-aotom-speed-up-softi2c-lowering-CPU-load-of-aotom-dr.patch \
         file://0006-aotom-add-additional-chars-for-VFD-fix-missing-chars.patch \
         file://0007-aotom-register-reboot_notifier-implement-rtc-driver.patch \
-        file://aotom_udev.rules \
 	file://tdt-driver.init \
         file://COPYING \
 " 
@@ -40,7 +39,7 @@ PV = "0.2+git${SRCPV}"
 FILES_${PN} = "/etc/udev/rules.d "
 FILES = ""
 
-S = "${WORKDIR}/git/tdt/cvs/driver"
+S = "${WORKDIR}/git"
 
 do_configure_prepend () {
     if [ -L include/stmfb ]; then

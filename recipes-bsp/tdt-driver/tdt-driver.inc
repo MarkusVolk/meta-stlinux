@@ -15,9 +15,9 @@ SRCREV = "${AUTOREV}"
 
 BINARY_PTI_NP_PATH ?= "/data/pti_np"
 
-# using seifes tdt drivers because this has less overhead
+# using our own tdt drivers because this has less overhead
 SRC_URI = " \
-        git://gitorious.org/neutrino-mp/tdt-driver.git \
+        git://gitorious.org/~martii/open-duckbox-project-sh4/martiis-tdt.git \
         file://0001-player2_191-silence-kmsg-spam.patch;apply=no \
         file://0002-e2proc-silence-kmsg-spam.patch \
         file://0003-pti-silence-kmsg-spam.patch \
@@ -32,6 +32,7 @@ SRC_URI = " \
         file://0006-aotom-add-additional-chars-for-VFD-fix-missing-chars.patch \
         file://0007-aotom-register-reboot_notifier-implement-rtc-driver.patch \
         file://aotom_udev.rules \
+	file://tdt-driver.init \
         file://COPYING \
 " 
 PV = "0.2+git${SRCPV}"
@@ -39,7 +40,7 @@ PV = "0.2+git${SRCPV}"
 FILES_${PN} = "/etc/udev/rules.d "
 FILES = ""
 
-S = "${WORKDIR}/git"
+S = "${WORKDIR}/git/tdt/cvs/driver"
 
 do_configure_prepend () {
     if [ -L include/stmfb ]; then
@@ -135,6 +136,44 @@ do_install() {
            echo "Found custom pti.." 
            install -m 644 ${BINARY_PTI_NP_PATH}/pti_${STM_PATCH_STR}.ko ${D}/lib/modules/${KERNEL_VERSION}/extra/pti/
     fi
+
+	install -D -m 0755 ${WORKDIR}/tdt-driver.init ${D}/etc/init.d/tdt-driver
+	# drivers seem to be right at about ~ 30
+	update-rc.d -r ${D} tdt-driver start 30 S .
+}
+MOD7111 = "/lib/modules/7111/${KERNEL_VERSION}/extra"
+MOD7162 = "/lib/modules/7162/${KERNEL_VERSION}/extra"
+FILES_${PN} += " \
+	${MOD7111}/avs		${MOD7162}/avs \
+	${MOD7111}/boxtype	${MOD7162}/boxtype \
+	${MOD7111}/bpamem	${MOD7162}/bpamem \
+	${MOD7111}/cec		${MOD7162}/cec \
+	${MOD7111}/compcache	${MOD7162}/compcache \
+	${MOD7111}/cpu_frequ	${MOD7162}/cpu_frequ \
+	${MOD7111}/e2_proc	${MOD7162}/e2_proc \
+	${MOD7111}/frontcontroller ${MOD7162}/frontcontroller \
+	${MOD7111}/frontends	${MOD7162}/frontends \
+	${MOD7111}/multicom	${MOD7162}/multicom \
+	${MOD7111}/player2	${MOD7162}/player2 \
+	${MOD7111}/pti		${MOD7162}/pti \
+	${MOD7111}/smartcard	${MOD7162}/smartcard \
+	${MOD7111}/stgfb	${MOD7162}/stgfb \
+	/etc/init.d \
+	/etc/rcS.d \
+"
+
+pkg_postinst_${PN}() {
+!/bin/sh
+ create the default symlink to 7111 module dir or image build will fail.
+if ! [ -e $D/lib/modules/${KERNEL_VERSION} ]; then
+ 	ln -s 7111/${KERNEL_VERSION} $D/lib/modules/
+fi
+if [ -z "$D" ]; then
+	depmod -a ${KERNEL_VERSION}
+else
+	depmodwrapper -a -b $D ${KERNEL_VERSION}
+fi
+
 }
 
 do_install_append_spark7162() {

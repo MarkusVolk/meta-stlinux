@@ -86,4 +86,5 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 ## seems to be http://gcc.gnu.org/bugzilla/show_bug.cgi?id=58314
 ## which is not fixed in any released 4.8.x, so just use 4.7 for now:
 ##
-GCCVERSION ?= "4.7%"
+## we workaround this issue by patching the kernel source
+GCCVERSION ?= "4.8%"

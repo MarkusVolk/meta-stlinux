@@ -10,14 +10,14 @@ inherit module
 PACKAGES = "${PN} ${PN}-dev"
 PACKAGES_DYNAMIC += "kernel-module-*"
 
-SRCREV = "a187619deaf19d8419c3a868b78581fbbc3e7898"
+SRCREV = "${AUTOREV}"
 
 
 BINARY_PTI_NP_PATH ?= "/data/pti_np"
 
-# using our own tdt drivers because this has less overhead
+# using seifes tdt drivers because this has less overhead
 SRC_URI = " \
-        git://github.com/project-magpie/tdt-driver.git \
+        git://gitorious.org/neutrino-mp/tdt-driver.git \
         file://0001-player2_191-silence-kmsg-spam.patch;apply=no \
         file://0002-e2proc-silence-kmsg-spam.patch \
         file://0003-pti-silence-kmsg-spam.patch \

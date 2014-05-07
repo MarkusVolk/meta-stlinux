@@ -17,7 +17,7 @@ S = "${WORKDIR}/git/tdt/cvs/apps/misc/tools"
 
 inherit autotools 
 
-EXTRA_OECONF = "--enable-silent-rules --enable-maintainer-mode --prefix="
+EXTRA_OECONF = "--enable-silent-rules --prefix="
 
 do_compile() {
 	 oe_runmake  'DESTDIR=${D}' 'SUBDIRS=${@d.getVar('PN',1).replace('-', '_')}' 

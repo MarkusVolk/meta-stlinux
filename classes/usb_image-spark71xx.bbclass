@@ -109,7 +109,7 @@ IMAGE_CMD_spark71xx-usbimg () {
 	fi
 
 	mkdir -p ${DEPLOY_DIR_IMAGE}/flashimage/spark
-	cp ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.jffs2.sum ${DEPLOY_DIR_IMAGE}/flashimage/spark/e2jffs2.img
-	cp ${DEPLOY_DIR_IMAGE}/uImage ${DEPLOY_DIR_IMAGE}/flashimage/spark/uImage
+	cp ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.jffs2.sum ${DEPLOY_DIR_IMAGE}/flashimage/enigma2/e2jffs2.img
+	cp ${DEPLOY_DIR_IMAGE}/uImage ${DEPLOY_DIR_IMAGE}/flashimage/enigma2/uImage
 }
 

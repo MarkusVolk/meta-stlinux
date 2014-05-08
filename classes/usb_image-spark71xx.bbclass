@@ -107,5 +107,9 @@ IMAGE_CMD_spark71xx-usbimg () {
 	else
 		dd if=${SDIMG_ROOTFS} of=${SDIMG} conv=notrunc seek=1 bs=$(expr 1024 \* ${BOOT_SPACE_ALIGNED} + ${IMAGE_ROOTFS_ALIGNMENT} \* 1024) && sync && sync
 	fi
+
+	mkdir -p ${DEPLOY_DIR_IMAGE}/flashimage/spark
+	cp ${DEPLOY_DIR_IMAGE}/${IMAGE_NAME}.rootfs.jffs2.sum ${DEPLOY_DIR_IMAGE}/flashimage/spark/e2jffs2.img
+	cp ${DEPLOY_DIR_IMAGE}/uImage ${DEPLOY_DIR_IMAGE}/flashimage/spark/uImage
 }
 

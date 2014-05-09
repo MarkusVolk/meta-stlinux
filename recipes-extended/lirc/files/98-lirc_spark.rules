@@ -2,4 +2,4 @@
 # to work correctly 
 KERNELS=="input*", SUBSYSTEMS=="input", ATTRS{name}=="lircd", SYMLINK+="input/nevis_ir"
 # This udev rule creates a Link to /dev/lirc
-KERNEL=="lirc[0-9]*", NAME="%k", SYMLINK+="lirc"
+KERNEL=="lirc[0-9]*", SYMLINK+="lirc"

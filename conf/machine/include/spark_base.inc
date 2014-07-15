@@ -2,8 +2,8 @@ require conf/machine/include/tune-sh4.inc
 TARGET_ARCH = "sh4"
 STLINUX_SH_UPD_SRPMS = "http://ftp.stlinux.com/pub/stlinux/2.4/updates/SRPMS"
 STLINUX_SH_UPD_RPMS = "http://ftp.stlinux.com/pub/stlinux/2.4/updates/RPMS/sh4/"
-STM_PATCH_STR ??= "0211"
-LINUX_VERSION ??= "2.6.32.59"
+STM_PATCH_STR ??= "0214"
+LINUX_VERSION ??= "2.6.32.61"
 
 PREFERRED_VERSION_stlinux24-${MACHINE} = "${LINUX_VERSION}-stm24-${STM_PATCH_STR}"
 PREFERRED_VERSION_linux-libc-headers = "2.6.32"
@@ -11,29 +11,29 @@ PREFERRED_PROVIDER_virtual/kernel = "stlinux24-${MACHINE}"
 PREFERRED_PROVIDER_openssl = "openssl"
 PREFERRED_PROVIDER_libcrypto = "openssl"
 PREFERRED_PROVIDER_libssl = "openssl"
-#PREFERRED_PROVIDER_virtual/nativesdk-libc = "nativesdk-glibc"
-#PREFERRED_PROVIDER_virtual/nativesdk-libiconv = "nativesdk-libiconv"
-#PREFERRED_PROVIDER_virtual/nativesdk-libintl = "nativesdk-gettext"
-#PREFERRED_VERSION_glibc = "2.10"
-#PREFERRED_VERSION_glibc                   ?= "${GLIBCVERSION}"
-#PREFERRED_VERSION_glibc-locale            ?= "${GLIBCVERSION}"
-#PREFERRED_VERSION_glibc-nativesdk         ?= "2.10"
-#PREFERRED_VERSION_glibc-initial           ?= "${GLIBCVERSION}"
-#PREFERRED_VERSION_glibc-initial-nativesdk ?= "2.10"
+PREFERRED_PROVIDER_udev ?= "${@base_contains('DISTRO_FEATURES','systemd','systemd','udev',d)}"
+PREFERRED_PROVIDER_curl ?= "curl"
+
+PREFERRED_VERSION_glibc = "2.10"
+PREFERRED_VERSION_glibc ?= "${GLIBCVERSION}"
+PREFERRED_VERSION_glibc-locale ?= "${GLIBCVERSION}"
+PREFERRED_VERSION_glibc-nativesdk ?= "2.10"
+PREFERRED_VERSION_glibc-initial ?= "${GLIBCVERSION}"
+PREFERRED_VERSION_glibc-initial-nativesdk ?= "2.10"
 
 USE_VT = "0"
-MACHINE_FEATURES = "kernel26 ext2 alsa ext3 usbhost serial"
+MACHINE_FEATURES = "kernel26 ext2 alsa usbhost serial legacykernel wifi wifiusblegacy"
 
 SERIAL_CONSOLE = "115200 ttyAS0"
 
 KERNEL_IMAGETYPE = "uImage"
 
-# save some extra space, kernel has its own mtd partion 
+# save some extra space, kernel has its own mtd partion
 RDEPENDS_kernel-base = ""
 
 UBI_VOLNAME = "rootfs"
-MKUBIFS_ARGS = "-m 2048 -e 129024 -c 638   -F"
-UBINIZE_ARGS = "-m 2048 -p 128KiB -O 512"
+MKUBIFS_ARGS = "-m 2048 -e 126976 -c 4096 -F"
+UBINIZE_ARGS = "-m 2048 -p 128KiB"
 
 JFFS2_ERASEBLOCK = "0x20000"
 JFFS2_SUM_EXTRA_ARGS = "-p -e 0x20000"
@@ -44,8 +44,6 @@ IMAGE_FSTYPES ?= "tar.gz ubi ext2 jffs2.sum spark71xx-usbimg"
 
 IMAGE_CLASSES += "usb_image-spark71xx"
 INITRAMFS_FSTYPES = "ext2.gz spark-updt"
-
-MACHINE_EXTRA_RRECOMMENDS = "kernel-modules"
 
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
                                      stlinux24-sh4-stx7111-fdma-firmware \
@@ -64,12 +62,30 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS += " \
                                      tdt-driver \
 "
 
+MACHINE_EXTRA_RRECOMMENDS = " \
+        gst-plugin-dvbmediasink \
+        tdt-driver \
+        kernel-modules \
+        "
+GCCVERSION ?= "4.8%"
+
+#####
+##### With eglibc-2.18 / OLDEST_KERNEL=2.6.12 (default), I had strange
+##### problems with user name resolution, apparently libnss_files-2.18.so
+##### was incompatible and could not be used (????!!!)
+#####
+##### I'm actually not sure if it is a eglibc-2.18 problem, solved by
+##### downgrading to 2.17 or if the "OLDEST_KERNEL=2.6.32" solves the
+##### issue, as I have changed both at once, but now my box works fine.
+#####
 ##
-## We have a RTC in aotom thx to seife.
-## I have to check for removale 
-## 
-#Spark Boxes have no hardware clock
-MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
+## eglibc-2.18 gives me strange results wrt. user name resolution etc.
+##
+EGLIBCVERSION ?= "2.19"
+##
+## stlinux is configured like that:
+OLDEST_KERNEL = "2.6.32"
+
 
 
 ##
@@ -88,3 +104,4 @@ MACHINE_FEATURES_BACKFILL_CONSIDERED = "rtc"
 ##
 ## we workaround this issue by patching the kernel source
 GCCVERSION ?= "4.8%"
+

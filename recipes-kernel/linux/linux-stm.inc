@@ -7,21 +7,21 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=d7810fab7487fb0aad327b76f1be7cd7"
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-stm:"
 
 
+RPROVIDES_kernel-base = "kernel-${KERNEL_VERSION}"
 
 KEEPUIMAGE = "true"
 KTAG = "stlinux24_${STM_PATCH_STR}"
-INC_PR = "r2"
+
 
 # Quirk for udev greater or equal 141
-UDEV_GE_141 ?= "0"
+UDEV_GE_141 ?= "1"
 
-KBRANCH = "project-magpie"
+KBRANCH = "spark71xx-0214"
 
-SRC_URI = " \
-		git://github.com/project-magpie/linux-sh4-2.6.32.y.git;protocol=https;branch=${KBRANCH} \
-		file://${MACHINE}_defconfig \
-		file://st-coprocessor.h \
-		file://console.map.c-workaround-for-gcc-4.8.2-build.patch \
+SRC_URI = "git://github.com/project-magpie/linux-sh4-2.6.32.y.git;protocol=https;branch=spark71xx \
+           file://${MACHINE}_defconfig \
+           file://st-coprocessor.h \
+	   file://console.map.c-workaround-for-gcc-4.8.2-build.patch \
 "
 S = "${WORKDIR}/git"
 PARALLEL_MAKEINST = ""
@@ -48,8 +48,8 @@ do_install_append() {
 	fi
 	install -d ${D}${includedir}/linux	
    	install -m 644 ${WORKDIR}/st-coprocessor.h ${D}${includedir}/linux
+	install -m 644 drivers/char/aotom/aotom_main.h ${D}/${includedir}
 }
-
 
 FILES_kernel-dev += "${includedir}/linux"
 
@@ -68,7 +68,9 @@ do_install_append() {
 }
 
 PACKAGES =+ "kernel-headers"
-FILES_kernel-headers = "${exec_prefix}/src/linux*"
+FILES_kernel-headers = "${exec_prefix}/src/linux* \
+			${includedir}/aotom_main.h \			
+"
 
 
 ## Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled

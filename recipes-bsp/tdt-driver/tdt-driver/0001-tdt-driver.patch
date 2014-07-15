@@ -1,0 +1,30 @@
+From 0cc66b46b67e05c467dbeb641417f2cd0a91463b Mon Sep 17 00:00:00 2001
+From: Markus Volk <f_l_k@gmx.net>
+Date: Sun, 13 Jul 2014 10:46:39 +0200
+Subject: [PATCH] tdt-driver
+
+Signed-off-by: Markus Volk <f_l_k@gmx.net>
+---
+ Makefile | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Makefile b/Makefile
+index ceb2460..ff6af1c 100644
+--- a/Makefile
++++ b/Makefile
+@@ -63,6 +63,12 @@ obj-y += i2c_spi/
+ obj-y += cec/
+ endif
+ 
++ifeq (,$(wildcard $(DRIVER_TOPDIR)/pti_np ))
++obj-y += pti/
++else
++obj-y += pti_np/
++endif
++
+ modules:
+ 	$(MAKE) ARCH=sh -C $(KLIB_BUILD) CC="${CC}" LD="${LD}"  M=$(DRIVER_TOPDIR) modules
+ modules_install:
+-- 
+2.0.0.rc2
+

@@ -25,6 +25,7 @@ SRC_URI = " \
         file://tdt-driver.init \
 	file://0001-tdt-driver.patch \
 	file://0001-pti_np.patch;apply=no \
+	file://aotom.sh \
         file://COPYING \
 " 
 

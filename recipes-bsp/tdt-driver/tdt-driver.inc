@@ -23,6 +23,8 @@ BINARY_PTI_NP_PATH ?= "/data/pti_np"
 SRC_URI = " \
         git://bitbucket.org/graugans/tdt-dvb-modules.git;protocol=https \
         file://tdt-driver.init \
+	file://0001-tdt-driver.patch \
+	file://0001-pti_np.patch \
         file://COPYING \
 " 
 

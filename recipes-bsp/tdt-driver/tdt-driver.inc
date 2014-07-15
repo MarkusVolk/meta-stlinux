@@ -24,7 +24,7 @@ SRC_URI = " \
         git://bitbucket.org/graugans/tdt-dvb-modules.git;protocol=https \
         file://tdt-driver.init \
 	file://0001-tdt-driver.patch \
-	file://0001-pti_np.patch \
+	file://0001-pti_np.patch;apply=no \
         file://COPYING \
 " 
 

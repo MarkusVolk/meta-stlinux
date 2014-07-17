@@ -51,8 +51,6 @@ do_install_append() {
 	install -m 644 drivers/char/aotom/aotom_main.h ${D}/${includedir}
 }
 
-FILES_kernel-dev += "${includedir}/linux"
-
 do_configure_append() {
         if test -e scripts/Makefile.fwinst ; then
 		sed -i -e "s:-m0644:-m 0644:g" scripts/Makefile.fwinst
@@ -67,11 +65,11 @@ do_install_append() {
 	oe_runmake headers_install INSTALL_HDR_PATH=${D}${exec_prefix}/src/linux-${KERNEL_VERSION} ARCH=$ARCH
 }
 
-PACKAGES =+ "kernel-headers"
-FILES_kernel-headers = "${exec_prefix}/src/linux* \
-			${includedir}/aotom_main.h \			
+FILES_kernel-dev += "${includedir}/linux"
+FILES_kernel-headers += "${exec_prefix}/src/linux* \
+			 ${includedir}/aotom_main.h \						
 "
-
+PACKAGES += "kernel-headers"
 
 ## Automatically depend on lzop-native if CONFIG_KERNEL_LZO is enabled
 python () {

@@ -182,5 +182,3 @@ python () {
         depends = d.getVar('DEPENDS', False)
         d.setVar('DEPENDS', depends + ' lzop-native')
 }
-
-
